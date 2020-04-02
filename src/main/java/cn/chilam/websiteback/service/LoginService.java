@@ -11,7 +11,5 @@ import java.util.List;
  * @create: 2020-03-04 17:28
  **/
 public interface LoginService {
-    List<User> ShowUserInfo();
-
     Boolean LoginVerify(String username, String password);
 }

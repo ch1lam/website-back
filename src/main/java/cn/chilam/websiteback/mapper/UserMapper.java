@@ -5,15 +5,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-/**
- * @program: website-back
- * @description: 用户接口
- * @author: chilam
- * @create: 2020-03-04 17:02
- **/
 @Repository
 public interface UserMapper {
-    List<User> getUserInfoAll();
+    int deleteByPrimaryKey(Integer id);
 
-    User getUserInfoByUsername(String username);
+    int insert(User record);
+
+    int insertSelective(User record);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
+
+    String getPasswordByUsername(String username);
+    String getRoleByUsername(String username);
 }

@@ -21,8 +21,7 @@ import java.util.Date;
 public class JWTUtil {
     // 服务器签名秘钥secret
     private static final String JWT_SECRET = "test_jwt_secret";
-    // objm
-    // pper
+    // objmpper
     private static final ObjectMapper MAPPER = new ObjectMapper();
     // toke过期
     public static final int JWT_ERRCODE_EXPIRE = 1005;

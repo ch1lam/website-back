@@ -1,10 +1,12 @@
 package cn.chilam.websiteback.controller;
 
-import cn.chilam.websiteback.common.entity.JWTResponseData;
-import cn.chilam.websiteback.common.entity.JWTResult;
-import cn.chilam.websiteback.common.entity.JWTSubject;
+import cn.chilam.websiteback.common.entity.*;
+import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.service.LoginService;
 import cn.chilam.websiteback.util.JWTUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +26,50 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private UserMapper userMapper;
+
+    @RequestMapping(value="/notLogin",method = RequestMethod.GET)
+    public ResultMap notLogin(){
+        return ResultMap.ok().message("你尚未登陆！");
+    }
+
+    @RequestMapping(value="/notRole",method = RequestMethod.GET)
+    public ResultMap notRole(){
+        return ResultMap.ok().message("你没有权限！");
+    }
+
+    public ResultMap logout(){
+        Subject subject= SecurityUtils.getSubject();
+        // 注销
+        subject.logout();
+        return ResultMap.ok().message("成功注销！");
+    }
+
+
+    // TODO 未封装于service层
+    @RequestMapping(value = "login",method = RequestMethod.POST)
+    public ResultMap login(String username,String password){
+        // 从SecurityUtils里创建一个subject
+        Subject subject=SecurityUtils.getSubject();
+        // 在认证提交前准备token（令牌）
+        UsernamePasswordToken token = new UsernamePasswordToken(username,password);
+        // 执行认证登陆
+        subject.login(token);
+        // 根据权限，指定返回数据
+        String role = userMapper.getRoleByUsername(username);
+        if ("user".equals(role)){
+            return ResultMap.ok().message("欢迎登陆！");
+        }else if("admin".equals(role)){
+            return ResultMap.ok().message("欢迎来到管理员页面");
+        }
+        return ResultMap.error().message("权限错误");
+    }
+
+
     @ResponseBody
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Object login(@RequestParam(value = "username") String username, @RequestParam(value = "password")
+    @RequestMapping(value = "/login1", method = RequestMethod.POST)
+    public Object login1(@RequestParam(value = "username") String username, @RequestParam(value = "password")
             String password) {
         JWTResponseData responseData = null;
         // 认证用户信息
@@ -65,12 +108,11 @@ public class LoginController {
             String newToken = JWTUtil.createJWT(result.getClaims().getId(), result.getClaims().getIssuer(), result
                     .getClaims().getSubject(), 30 * 60 * 1000);
             responseData.setToken(newToken);
-            return responseData;
         } else {
             responseData.setCode(500);
             responseData.setMsg("用户未登录");
-            return responseData;
         }
+        return responseData;
 
 
     }

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chilam.websiteback.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="role" jdbcType="VARCHAR" property="role"/>
+        <result column="phone_num" jdbcType="VARCHAR" property="phoneNum"/>
+        <result column="real_name" jdbcType="VARCHAR" property="realName"/>
+        <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
+        <result column="college_name" jdbcType="VARCHAR" property="collegeName"/>
+        <result column="school_num" jdbcType="VARCHAR" property="schoolNum"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, username, password, role, phone_num, real_name, id_card, college_name, school_num
+    </sql>
+
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="getPasswordByUsername" resultType="java.lang.String">
+        select password
+        from user
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="getRoleByUsername" resultType="java.lang.String">
+        select role
+        from user
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from user
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+
+    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.User">
+        insert into user (id, username, password,
+                          role, phone_num, real_name,
+                          id_card, college_name, school_num)
+        values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+                #{role,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+                #{idCard,jdbcType=VARCHAR}, #{collegeName,jdbcType=VARCHAR}, #{schoolNum,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.chilam.websiteback.pojo.User">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="role != null">
+                role,
+            </if>
+            <if test="phoneNum != null">
+                phone_num,
+            </if>
+            <if test="realName != null">
+                real_name,
+            </if>
+            <if test="idCard != null">
+                id_card,
+            </if>
+            <if test="collegeName != null">
+                college_name,
+            </if>
+            <if test="schoolNum != null">
+                school_num,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneNum != null">
+                #{phoneNum,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="collegeName != null">
+                #{collegeName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolNum != null">
+                #{schoolNum,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="cn.chilam.websiteback.pojo.User">
+        update user
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneNum != null">
+                phone_num = #{phoneNum,jdbcType=VARCHAR},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="idCard != null">
+                id_card = #{idCard,jdbcType=VARCHAR},
+            </if>
+            <if test="collegeName != null">
+                college_name = #{collegeName,jdbcType=VARCHAR},
+            </if>
+            <if test="schoolNum != null">
+                school_num = #{schoolNum,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+
+    <update id="updateByPrimaryKey" parameterType="cn.chilam.websiteback.pojo.User">
+        update user
+        set username     = #{username,jdbcType=VARCHAR},
+            password     = #{password,jdbcType=VARCHAR},
+            role         = #{role,jdbcType=VARCHAR},
+            phone_num    = #{phoneNum,jdbcType=VARCHAR},
+            real_name    = #{realName,jdbcType=VARCHAR},
+            id_card      = #{idCard,jdbcType=VARCHAR},
+            college_name = #{collegeName,jdbcType=VARCHAR},
+            school_num   = #{schoolNum,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

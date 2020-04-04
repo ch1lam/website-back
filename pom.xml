@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <shiro.spring.version>1.4.0</shiro.spring.version>
-        <jjwt.version>0.9.0</jjwt.version>
+        <auth0.jwt.version>3.3.0</auth0.jwt.version>
     </properties>
 
     <dependencies>
@@ -48,9 +48,9 @@
         </dependency>
         <!-- 引入jwt库 -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jjwt.version}</version>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${auth0.jwt.version}</version>
         </dependency>
         <!-- 引入shiro依赖 -->
         <dependency>

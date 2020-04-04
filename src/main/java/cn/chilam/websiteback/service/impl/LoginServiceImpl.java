@@ -1,7 +1,9 @@
 package cn.chilam.websiteback.service.impl;
 
+import cn.chilam.websiteback.common.entity.ResultMap;
 import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.service.LoginService;
+import cn.chilam.websiteback.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,25 @@ public class LoginServiceImpl implements LoginService {
             return false;
         }
         return password.equals(userMapper.getPasswordByUsername(username));
+    }
+
+
+    /**
+     * @description: 校验并刷新token
+     * @author: chilam
+     * @param: token
+     * @return: cn.chilam.websiteback.common.entity.ResultMap
+     * @date: 2020-04-04
+     */
+    @Override
+    public ResultMap refreshToken(String token) {
+        try {
+            String newToken = JWTUtil.createToken(JWTUtil.getKeyId(token),
+                    JWTUtil.getUsername(token));
+            return ResultMap.ok().data("token", newToken);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultMap.error().message("刷新token失败");
+        }
     }
 }

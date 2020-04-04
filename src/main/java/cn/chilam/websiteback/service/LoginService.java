@@ -1,5 +1,6 @@
 package cn.chilam.websiteback.service;
 
+import cn.chilam.websiteback.common.entity.ResultMap;
 import cn.chilam.websiteback.pojo.User;
 
 import java.util.List;
@@ -12,4 +13,6 @@ import java.util.List;
  **/
 public interface LoginService {
     Boolean LoginVerify(String username, String password);
+
+    ResultMap refreshToken(String token);
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.chilam.websiteback.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.User">
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -33,6 +34,10 @@
         from user
         where username = #{username,jdbcType=VARCHAR}
     </select>
+    <select id="getAllUser" resultMap="BaseResultMap">
+        select *
+        from user
+    </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -47,8 +52,10 @@
                           role, phone_num, real_name,
                           id_card, college_name, school_num)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-                #{role,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
-                #{idCard,jdbcType=VARCHAR}, #{collegeName,jdbcType=VARCHAR}, #{schoolNum,jdbcType=VARCHAR})
+                #{role,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR},
+                #{realName,jdbcType=VARCHAR},
+                #{idCard,jdbcType=VARCHAR}, #{collegeName,jdbcType=VARCHAR},
+                #{schoolNum,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="cn.chilam.websiteback.pojo.User">
         insert into user

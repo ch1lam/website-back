@@ -21,4 +21,6 @@ public interface UserMapper {
 
     String getPasswordByUsername(String username);
     String getRoleByUsername(String username);
+
+    List<User> getAllUser();
 }

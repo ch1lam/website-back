@@ -3,7 +3,6 @@ package cn.chilam.websiteback.common.config;
 import cn.chilam.websiteback.common.entity.JWTToken;
 import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.util.JWTUtil;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

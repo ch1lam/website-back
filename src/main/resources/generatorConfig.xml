@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <context id="test" targetRuntime="MyBatis3">
-        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"></plugin>
-        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
-        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"></plugin>
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
         <commentGenerator>
             <!-- 这个元素用来去除指定生成的注释中是否包含生成的日期 false:表示包含 -->

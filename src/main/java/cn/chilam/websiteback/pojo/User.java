@@ -3,25 +3,16 @@ package cn.chilam.websiteback.pojo;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private Integer id;
-
-    private String username;
-
-    private String password;
-
-    private String role;
-
-    private String phoneNum;
-
-    private String realName;
-
-    private String idCard;
-
-    private String collegeName;
-
-    private String schoolNum;
-
     private static final long serialVersionUID = 1L;
+    private Integer id;
+    private String username;
+    private String password;
+    private String role;
+    private String phoneNum;
+    private String realName;
+    private String idCard;
+    private String collegeName;
+    private String schoolNum;
 
     public Integer getId() {
         return id;
@@ -108,14 +99,22 @@ public class User implements Serializable {
         }
         User other = (User) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
-            && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
-            && (this.getRole() == null ? other.getRole() == null : this.getRole().equals(other.getRole()))
-            && (this.getPhoneNum() == null ? other.getPhoneNum() == null : this.getPhoneNum().equals(other.getPhoneNum()))
-            && (this.getRealName() == null ? other.getRealName() == null : this.getRealName().equals(other.getRealName()))
-            && (this.getIdCard() == null ? other.getIdCard() == null : this.getIdCard().equals(other.getIdCard()))
-            && (this.getCollegeName() == null ? other.getCollegeName() == null : this.getCollegeName().equals(other.getCollegeName()))
-            && (this.getSchoolNum() == null ? other.getSchoolNum() == null : this.getSchoolNum().equals(other.getSchoolNum()));
+                && (this.getUsername() == null ? other.getUsername() == null :
+                this.getUsername().equals(other.getUsername()))
+                && (this.getPassword() == null ? other.getPassword() == null :
+                this.getPassword().equals(other.getPassword()))
+                && (this.getRole() == null ? other.getRole() == null :
+                this.getRole().equals(other.getRole()))
+                && (this.getPhoneNum() == null ? other.getPhoneNum() == null :
+                this.getPhoneNum().equals(other.getPhoneNum()))
+                && (this.getRealName() == null ? other.getRealName() == null :
+                this.getRealName().equals(other.getRealName()))
+                && (this.getIdCard() == null ? other.getIdCard() == null :
+                this.getIdCard().equals(other.getIdCard()))
+                && (this.getCollegeName() == null ? other.getCollegeName() == null :
+                this.getCollegeName().equals(other.getCollegeName()))
+                && (this.getSchoolNum() == null ? other.getSchoolNum() == null :
+                this.getSchoolNum().equals(other.getSchoolNum()));
     }
 
     @Override

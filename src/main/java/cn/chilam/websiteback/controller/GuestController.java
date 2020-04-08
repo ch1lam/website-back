@@ -46,14 +46,14 @@ public class GuestController {
     }
 
     @PostMapping("/upload")
-    public ResultMap upload(@RequestParam("file")MultipartFile file){
-        if(file.isEmpty()){
+    public ResultMap upload(@RequestParam("file") MultipartFile file) {
+        if (file.isEmpty()) {
             return ResultMap.error().message("上传失败");
         }
         String fileName = file.getOriginalFilename();
         String filePath = "D://Videos/Upload/";
-        File dest= new File(filePath+fileName);
-        try{
+        File dest = new File(filePath + fileName);
+        try {
             file.transferTo(dest);
             return ResultMap.ok().message("上传成功");
         } catch (IOException e) {

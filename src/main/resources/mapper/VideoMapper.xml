@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.chilam.websiteback.mapper.VideoMapper">
     <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.Video">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="size" jdbcType="INTEGER" property="size"/>
@@ -22,7 +22,7 @@
 
     <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Video">
         insert into video (id, name, url, size)
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
+        values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
                 #{size,jdbcType=INTEGER})
     </insert>
 

@@ -48,7 +48,7 @@ public class LoginController {
 
 
     // TODO 未封装于service层
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResultMap login(@RequestParam("username") String username,
                            @RequestParam("password") String password) {
         String realPassword = userMapper.getPasswordByUsername(username);
@@ -62,7 +62,23 @@ public class LoginController {
                     username));
             return ResultMap.ok().data(data);
         }
+    }
+
+    @PostMapping("/resign")
+    public ResultMap resign(String username, String password, String phoneNum) {
+        switch (loginService.resign(username, password, phoneNum)) {
+            case 0:
+                return ResultMap.ok().message("注册成功");
+            case 1:
+                return ResultMap.error().message("注册失败");
+            case 2:
+                return ResultMap.error().message("用户名重复");
+            default:
+                return ResultMap.error().message("未知错误");
+        }
+
 
     }
+
 
 }

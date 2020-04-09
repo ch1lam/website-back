@@ -2,10 +2,13 @@ package cn.chilam.websiteback.service.impl;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
 import cn.chilam.websiteback.mapper.UserMapper;
+import cn.chilam.websiteback.pojo.User;
 import cn.chilam.websiteback.service.LoginService;
 import cn.chilam.websiteback.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 
 /**
@@ -28,7 +31,7 @@ public class LoginServiceImpl implements LoginService {
      * @date: 2020-03-07
      */
     @Override
-    public Boolean LoginVerify(String username, String password) {
+    public Boolean loginVerify(String username, String password) {
         // 判空
         if (null == username || username.trim().length() == 0) {
             return false;
@@ -55,4 +58,30 @@ public class LoginServiceImpl implements LoginService {
             return ResultMap.error().message("刷新token失败");
         }
     }
+
+
+    /**
+     * @description: 注册服务
+     * @author: chilam
+     * @param: username
+     * @param: password
+     * @param: phoneNum
+     * @return: 返回0表示注册失败 返回1表示注册成功 返回2表示用户名已存在
+     * @date: 2020-04-09
+     */
+    @Override
+    public int resign(String username, String password, String phoneNum) {
+        if (1 == userMapper.isExistsByUsername(username)) {
+            return 2;
+        }
+        User user = new User(username, password, "admin", phoneNum);
+        try {
+            userMapper.insertSelective(user);
+            return 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 }

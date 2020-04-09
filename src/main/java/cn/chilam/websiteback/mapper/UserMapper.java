@@ -23,4 +23,6 @@ public interface UserMapper {
     String getRoleByUsername(String username);
 
     List<User> getAllUser();
+
+    int isExistsByUsername(String username);
 }

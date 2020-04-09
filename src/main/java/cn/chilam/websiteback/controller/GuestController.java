@@ -1,6 +1,8 @@
 package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
+import cn.chilam.websiteback.service.UploadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +22,9 @@ import java.io.OutputStream;
 @RestController
 @RequestMapping("/guest")
 public class GuestController {
+    @Autowired
+    UploadService uploadService;
+
     @RequestMapping(value = "/enter", method = RequestMethod.GET)
     public ResultMap login() {
         return ResultMap.ok();
@@ -45,21 +50,13 @@ public class GuestController {
 
     }
 
-    @PostMapping("/upload")
-    public ResultMap upload(@RequestParam("file") MultipartFile file) {
-        if (file.isEmpty()) {
+    @PostMapping("/uploadVideo")
+    public ResultMap uploadVideo(@RequestParam("file") MultipartFile file) {
+        if (uploadService.uploadVideo(file)) {
+            return ResultMap.ok().message("上传成功");
+        } else {
             return ResultMap.error().message("上传失败");
         }
-        String fileName = file.getOriginalFilename();
-        String filePath = "D://Videos/Upload/";
-        File dest = new File(filePath + fileName);
-        try {
-            file.transferTo(dest);
-            return ResultMap.ok().message("上传成功");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return ResultMap.error().message("上传失败");
     }
 
 }

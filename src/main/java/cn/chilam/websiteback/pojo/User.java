@@ -14,6 +14,13 @@ public class User implements Serializable {
     private String collegeName;
     private String schoolNum;
 
+    public User(String username, String password, String role, String phoneNum) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.phoneNum = phoneNum;
+    }
+
     public Integer getId() {
         return id;
     }

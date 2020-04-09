@@ -38,6 +38,12 @@
         select *
         from user
     </select>
+    <select id="isExistsByUsername" resultType="java.lang.Integer">
+        select 1
+        from user
+        where username = #{username,jdbcType=VARCHAR}
+        limit 1
+    </select>
 
 
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">

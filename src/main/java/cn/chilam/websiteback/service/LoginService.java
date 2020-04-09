@@ -12,7 +12,9 @@ import java.util.List;
  * @create: 2020-03-04 17:28
  **/
 public interface LoginService {
-    Boolean LoginVerify(String username, String password);
+    Boolean loginVerify(String username, String password);
 
     ResultMap refreshToken(String token);
+
+    int resign(String username,String password,String phoneNum);
 }

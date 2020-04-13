@@ -51,16 +51,13 @@ public class LoginController {
     @PostMapping("/login")
     public ResultMap login(@RequestParam("username") String username,
                            @RequestParam("password") String password) {
-        String realPassword = userMapper.getPasswordByUsername(username);
-        if (realPassword == null) {
-            return ResultMap.error().message("用户名错误");
-        } else if (!realPassword.equals(password)) {
-            return ResultMap.error().message("密码错误");
-        } else {
+        if (loginService.loginVerify(username, password)) {
             Map<String, Object> data = new HashMap<>();
             data.put("token", JWTUtil.createToken(UUID.randomUUID().toString(),
                     username));
             return ResultMap.ok().data(data);
+        } else {
+            return ResultMap.error().message("用户名或密码错误");
         }
     }
 

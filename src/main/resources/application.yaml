@@ -13,5 +13,16 @@ spring:
       max-request-size: 10240MB
       # 单个文件最大值
       max-file-size: 1024MB
+upload:
+  file:
+    # 文件上传路径
+    location: D:\upload\
 server:
+  # api端口
   port: 9999
+# 日志文件配置
+logging:
+  file:
+    # 日志文件路径
+    name: D:\log\website.log
+  level.config: info

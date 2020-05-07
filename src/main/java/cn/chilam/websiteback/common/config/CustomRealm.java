@@ -11,6 +11,8 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,8 @@ import java.util.Set;
  **/
 @Component
 public class CustomRealm extends AuthorizingRealm {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private UserMapper userMapper;
 
     @Autowired
@@ -46,7 +50,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
-        System.out.println("——身份认证——");
+        logger.info("进行身份认证");
         String token = (String) authenticationToken.getCredentials();
         // 解密获得 username，用于和数据库进行对比
         String username = JWTUtil.getUsername(token);
@@ -81,7 +85,7 @@ public class CustomRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        System.out.println("——权限认证——");
+        logger.info("进行权限认证");
         String username=JWTUtil.getUsername(principalCollection.toString());
         SimpleAuthorizationInfo info=new SimpleAuthorizationInfo();
         // 获得该用户角色

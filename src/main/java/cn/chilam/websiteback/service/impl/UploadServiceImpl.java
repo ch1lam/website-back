@@ -1,11 +1,16 @@
 package cn.chilam.websiteback.service.impl;
 
+import cn.chilam.websiteback.mapper.VideoMapper;
+import cn.chilam.websiteback.pojo.Video;
 import cn.chilam.websiteback.service.UploadService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * @program: website-back
@@ -15,6 +20,8 @@ import java.io.IOException;
  **/
 @Service
 public class UploadServiceImpl implements UploadService {
+    @Autowired
+    private VideoMapper videoMapper;
 
     /**
      * @description: 上传视频
@@ -31,7 +38,11 @@ public class UploadServiceImpl implements UploadService {
         String fileName = file.getOriginalFilename();
         String filePath = "D://Videos/Upload/";
         File dest = new File(filePath + fileName);
+        long fileSize = file.getSize();
         try {
+            Video video = new Video(fileName,
+                    filePath + fileName, fileSize);
+            videoMapper.insert(video);
             file.transferTo(dest);
             return true;
         } catch (IOException e) {

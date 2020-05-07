@@ -65,9 +65,9 @@ public class LoginController {
     public ResultMap resign(String username, String password, String phoneNum) {
         switch (loginService.resign(username, password, phoneNum)) {
             case 0:
-                return ResultMap.ok().message("注册成功");
-            case 1:
                 return ResultMap.error().message("注册失败");
+            case 1:
+                return ResultMap.ok().message("注册成功");
             case 2:
                 return ResultMap.error().message("用户名重复");
             default:
@@ -76,6 +76,5 @@ public class LoginController {
 
 
     }
-
 
 }

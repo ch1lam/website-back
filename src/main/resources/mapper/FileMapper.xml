@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.chilam.websiteback.mapper.VideoMapper">
-    <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.Video">
+<mapper namespace="cn.chilam.websiteback.mapper.FileMapper">
+    <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.File">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="size" jdbcType="BIGINT" property="size"/>
         <result column="upload_date" jdbcType="TIMESTAMP" property="date"/>
     </resultMap>
-
     <sql id="Base_Column_List">
         id, name, url, role, size,upload_date
     </sql>
 
-    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Video">
-        insert into video (name, url, size)
+    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.File">
+        insert into file (name, url, size)
         values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
                 #{size,jdbcType=BIGINT})
     </insert>
 
-    <select id="getVideoInfoByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <delete id="deleteByName" parameterType="java.lang.String">
+        delete
+        from file
+        where name = #{name,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="getFileInfoByName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from video
+        from file
+        where name=#{name,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUrlByName" parameterType="java.lang.String" resultType="java.lang.String">
+        select url
+        from file
         where name = #{name,jdbcType=VARCHAR}
     </select>
-    <select id="getUrlByName" resultType="java.lang.String">
-        select url
-        from video
-        where name = #{name,jdbcType=VARCHAR}
+
+    <select id="getAllFileInfo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from file
     </select>
 
 

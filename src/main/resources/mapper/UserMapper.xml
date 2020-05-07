@@ -12,9 +12,10 @@
         <result column="id_card" jdbcType="VARCHAR" property="idCard"/>
         <result column="college_name" jdbcType="VARCHAR" property="collegeName"/>
         <result column="school_num" jdbcType="VARCHAR" property="schoolNum"/>
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, role, phone_num, real_name, id_card, college_name, school_num
+        id, username, password, role, phone_num, real_name, id_card, college_name, school_num,gender
     </sql>
 
 
@@ -39,10 +40,25 @@
         from user
     </select>
     <select id="isExistsByUsername" resultType="java.lang.Integer">
-        select 1
+        select EXISTS(
+                       select *
+                       from user
+                       where username = #{username,jdbcType=VARCHAR})
+    </select>
+    <select id="selectByName" resultMap="BaseResultMap"
+            parameterType="java.lang.String">
+        select id,
+               username,
+               '***' as password,
+               role,
+               phone_num,
+               real_name,
+               id_card,
+               college_name,
+               school_num,
+               gender
         from user
         where username = #{username,jdbcType=VARCHAR}
-        limit 1
     </select>
 
 

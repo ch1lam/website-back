@@ -13,6 +13,7 @@ public class User implements Serializable {
     private String idCard;
     private String collegeName;
     private String schoolNum;
+    private Integer gender; // 性别 0：男性 1：女性
 
     public User(String username, String password, String role, String phoneNum) {
         this.username = username;
@@ -91,6 +92,14 @@ public class User implements Serializable {
 
     public void setSchoolNum(String schoolNum) {
         this.schoolNum = schoolNum == null ? null : schoolNum.trim();
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
     }
 
     @Override

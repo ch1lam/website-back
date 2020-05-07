@@ -3,15 +3,11 @@ package cn.chilam.websiteback.pojo;
 import java.io.Serializable;
 
 public class Course implements Serializable {
-    private Integer id;
-
-    private String name;
-
-    private Integer userId;
-
-    private Integer teacherId;
-
     private static final long serialVersionUID = 1L;
+    private Integer id;
+    private String name;
+    private Integer userId;
+    private String teacherName;
 
     public Integer getId() {
         return id;
@@ -37,12 +33,12 @@ public class Course implements Serializable {
         this.userId = userId;
     }
 
-    public Integer getTeacherId() {
-        return teacherId;
+    public String getTeacherName() {
+        return teacherName;
     }
 
-    public void setTeacherId(Integer teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacherName(String teacherName) {
+        this.teacherName = teacherName;
     }
 
     @Override
@@ -58,9 +54,12 @@ public class Course implements Serializable {
         }
         Course other = (Course) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getUserId() == null ? other.getUserId() == null : this.getUserId().equals(other.getUserId()))
-            && (this.getTeacherId() == null ? other.getTeacherId() == null : this.getTeacherId().equals(other.getTeacherId()));
+                && (this.getName() == null ? other.getName() == null :
+                this.getName().equals(other.getName()))
+                && (this.getUserId() == null ? other.getUserId() == null :
+                this.getUserId().equals(other.getUserId()))
+                && (this.getTeacherName() == null ? other.getTeacherName() == null :
+                this.getTeacherName().equals(other.getTeacherName()));
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Course implements Serializable {
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
         result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getTeacherId() == null) ? 0 : getTeacherId().hashCode());
+        result = prime * result + ((getTeacherName() == null) ? 0 : getTeacherName().hashCode());
         return result;
     }
 
@@ -83,7 +82,7 @@ public class Course implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", userId=").append(userId);
-        sb.append(", teacherId=").append(teacherId);
+        sb.append(", teacherId=").append(teacherName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

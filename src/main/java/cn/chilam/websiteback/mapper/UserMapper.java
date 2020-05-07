@@ -15,14 +15,19 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
+    User selectByName(String username);
+
+    List<User> getAllUser();
+
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
 
     String getPasswordByUsername(String username);
+
     String getRoleByUsername(String username);
 
-    List<User> getAllUser();
 
     int isExistsByUsername(String username);
+
 }

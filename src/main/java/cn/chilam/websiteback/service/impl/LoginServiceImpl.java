@@ -66,7 +66,7 @@ public class LoginServiceImpl implements LoginService {
      * @param: username
      * @param: password
      * @param: phoneNum
-     * @return: 返回0表示注册失败 返回1表示注册成功 返回2表示用户名已存在
+     * @return: 0：表示注册失败 1：表示注册成功 2：表示用户名已存在
      * @date: 2020-04-09
      */
     @Override
@@ -81,7 +81,9 @@ public class LoginServiceImpl implements LoginService {
         } catch (Exception e) {
             e.printStackTrace();
             return 0;
+
         }
+
     }
 
 }

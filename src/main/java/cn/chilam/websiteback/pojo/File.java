@@ -5,19 +5,18 @@ import java.util.Date;
 
 /**
  * @program: website-back
- * @description: 视频信息
+ * @description: 文件类
  * @author: chilam
- * @create: 2020-04-05 20:55
+ * @create: 2020-03-28 12:49
  **/
-public class Video implements Serializable {
-
+public class File implements Serializable {
     private Integer id;
     private String name;
     private String url;
     private Long size;
     private Date date;
 
-    public Video(String name, String url, Long size) {
+    public File(String name, String url, Long size) {
         this.name = name;
         this.url = url;
         this.size = size;

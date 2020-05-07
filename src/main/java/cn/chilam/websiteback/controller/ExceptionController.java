@@ -1,6 +1,5 @@
 package cn.chilam.websiteback.controller;
 
-import cn.chilam.websiteback.common.entity.ResultMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -15,7 +14,7 @@ public class ExceptionController {
 
     // 捕捉CustomRealm抛出的异常
     @ExceptionHandler
-    public ResultMap handleShiroException(Exception e) {
-        return ResultMap.error().message(e.getMessage());
+    public void handleShiroException(Exception e) {
+        System.out.print(e);
     }
 }

@@ -1,17 +1,17 @@
 package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
+import cn.chilam.websiteback.service.FileService;
 import cn.chilam.websiteback.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @program: website-back
@@ -21,42 +21,105 @@ import java.io.OutputStream;
  **/
 @RestController
 @RequestMapping("/guest")
+@CrossOrigin
 public class GuestController {
+
+
+
     @Autowired
-    UploadService uploadService;
+    FileService fileService;
 
-    @RequestMapping(value = "/enter", method = RequestMethod.GET)
-    public ResultMap login() {
-        return ResultMap.ok();
-    }
-
+    // 播放视频
     @GetMapping("/video")
-    public void videoStream(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        File file = new File("D:/Videos/Captures/WW3.mp4");
-        FileInputStream fileInputStream = new FileInputStream(file);
-        int i = fileInputStream.available();
-        byte[] bytes = new byte[i];
-        fileInputStream.read(bytes);
-        String rangeString = request.getHeader("Range");
-        long range = Long.valueOf(rangeString.substring(rangeString.indexOf("=") + 1,
-                rangeString.indexOf("-")));
-        response.setHeader("Content-Type", "video/mp4");
-        response.setContentType("application/video");
-        OutputStream output = response.getOutputStream();
-        output.write(bytes);
-        output.flush();
-        output.close();
-        fileInputStream.close();
+    public void videoStream(HttpServletRequest request,
+                            HttpServletResponse response) throws IOException {
+        // 清空缓存
+        response.reset();
+        // 获取响应的输出流
+        OutputStream outputStream = response.getOutputStream();
+//        File file = new File("D:/Videos/Captures/WW3.mp4");
+        File file = new File("D:/Videos/rrys/西部世界第3季/西部世界.Westworld.S03E05.中英字幕.HDTVrip.720P-人人影视" +
+                ".mp4");
+        if (file.exists()) {
+            //创建随机读取文件对象
+            RandomAccessFile targetFile = new RandomAccessFile(file, "r");
+            long fileLength = targetFile.length();
+            //获取从那个字节开始读取文件
+            String rangeString = request.getHeader("Range");
+            if (rangeString != null) {
+                long range = Long.parseLong(rangeString.substring(rangeString.indexOf("=") + 1,
+                        rangeString.indexOf("-")));
+                // 设置内容类型
+                response.setContentType("video/mp4");
+                //设置此次相应返回的数据长度
+                response.setHeader("Content-Length", String.valueOf(fileLength - range));
+                //设置此次相应返回的数据范围
+                response.setHeader("Content-Range", "bytes " + range + "-" + (fileLength - 1) +
+                        "/" + fileLength);
+                //返回码需要为206，而不是200
+                response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
+                //设定文件读取开始位置（以字节为单位）
+                targetFile.seek(range);
+            }
+            byte[] cache = new byte[1024 * 300];
+            int flag;
+            while ((flag = targetFile.read(cache)) != -1) {
+                outputStream.write(cache, 0, flag);
+            }
 
+        } else {
+            String message = "file: WW3.mp4 not exists";
+            response.setHeader("Content-Type", "application/json");
+            outputStream.write(message.getBytes(StandardCharsets.UTF_8));
+        }
+        outputStream.flush();
+        outputStream.close();
     }
 
+
+    // 上传视频
     @PostMapping("/uploadVideo")
     public ResultMap uploadVideo(@RequestParam("file") MultipartFile file) {
-        if (uploadService.uploadVideo(file)) {
+        if (fileService.uploadVideo(file)) {
             return ResultMap.ok().message("上传成功");
         } else {
             return ResultMap.error().message("上传失败");
         }
+    }
+    
+
+
+    // 下载文件
+    @GetMapping("/download/{fileName}")
+    public void downloadWithFileName(@PathVariable("fileName") String fileName,
+                                     HttpServletResponse response) {
+        File file = new File(fileService.getUrlByName(fileName));
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        byte[] buff = new byte[1024];
+        BufferedInputStream bis = null;
+        OutputStream os = null;
+        try {
+            os = response.getOutputStream();
+            bis = new BufferedInputStream(new FileInputStream(file));
+            int i = bis.read(buff);
+            while (i != -1) {
+                os.write(buff, 0, buff.length);
+                os.flush();
+                i = bis.read(buff);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
     }
 
 }

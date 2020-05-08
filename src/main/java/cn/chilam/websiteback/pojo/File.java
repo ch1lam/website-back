@@ -21,7 +21,6 @@ public class File implements Serializable {
         this.url = url;
         this.size = size;
     }
-
     public Integer getId() {
         return id;
     }

@@ -1,6 +1,9 @@
 # Mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+# PageHelper配置
+pagehelper:
+  helper-dialect: mysql
 spring:
   # 配置MySQL数据库
   datasource:

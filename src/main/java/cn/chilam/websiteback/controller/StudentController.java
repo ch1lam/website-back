@@ -1,12 +1,20 @@
 package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
+import cn.chilam.websiteback.service.UploadService;
 import cn.chilam.websiteback.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +31,10 @@ public class StudentController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    UploadService uploadService;
+
+
     @RequestMapping(value = "/getMessage", method = RequestMethod.GET)
     @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
     public ResultMap getMessage() {
@@ -36,5 +48,46 @@ public class StudentController {
         Map<String, Object> data = new HashMap<>();
         data.put("userInfo", userService.getUserInfoByName(username));
         return ResultMap.ok().data(data);
+    }
+
+    @PostMapping("/putPassword")
+    @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
+    public ResultMap putPassword(@RequestParam("username") String username, @RequestParam(
+            "password") String password, @Param("newPassword") String newPassword) {
+        if (userService.updatePassword(username, password, newPassword)) {
+            return ResultMap.ok().message("密码修改成功");
+        } else {
+            return ResultMap.error().message("密码修改失败");
+        }
+    }
+
+
+    /**
+     * @description: 获取用户头像
+     * @author: chilam
+     * @param: username
+     * @return: byte[]
+     * @date: 2020-04-05
+     */
+    @GetMapping(value = "/getAvatar", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getAvatar(@RequestParam("username") String username) throws IOException {
+        String url = userService.getAvatarUrl(username);
+        File file = new File(url);
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
+    }
+
+    @PostMapping("/uploadAvatar")
+    @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
+    public ResultMap uploadAvatar(@RequestParam("file") MultipartFile file,
+                                  @RequestParam("username") String username) {
+        if (uploadService.uploadAvatar(file, username)) {
+            return ResultMap.ok().message("上传成功");
+        } else {
+            return ResultMap.error().message("上传失败");
+        }
+
     }
 }

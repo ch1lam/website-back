@@ -13,4 +13,6 @@ import java.util.List;
 public interface UserService {
     User getUserInfoByName(String name);
     List<User> getAllUser();
+    boolean updatePassword(String username,String password,String newPassword);
+    String getAvatarUrl(String username);
 }

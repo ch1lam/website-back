@@ -6,6 +6,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="teacher_name" jdbcType="VARCHAR" property="teacherName"/>
+        <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, name, user_id, teacher_name
@@ -15,6 +16,11 @@
         <include refid="Base_Column_List"/>
         from course
         where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAllCourse" resultType="cn.chilam.websiteback.pojo.Course">
+        select
+        <include refid="Base_Column_List"/>
+        from course
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

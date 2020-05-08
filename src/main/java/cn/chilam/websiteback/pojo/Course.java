@@ -8,6 +8,8 @@ public class Course implements Serializable {
     private String name;
     private Integer userId;
     private String teacherName;
+    private String pictureUrl;
+
 
     public Integer getId() {
         return id;
@@ -40,6 +42,10 @@ public class Course implements Serializable {
     public void setTeacherName(String teacherName) {
         this.teacherName = teacherName;
     }
+
+    public String getPictureUrl() { return pictureUrl;}
+
+    public void setPictureUrl(String pictureUrl) { this.pictureUrl = pictureUrl; }
 
     @Override
     public boolean equals(Object that) {

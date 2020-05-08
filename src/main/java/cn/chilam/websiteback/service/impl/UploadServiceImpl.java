@@ -1,5 +1,6 @@
 package cn.chilam.websiteback.service.impl;
 
+import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.mapper.VideoMapper;
 import cn.chilam.websiteback.pojo.Video;
 import cn.chilam.websiteback.service.UploadService;
@@ -22,6 +23,9 @@ import java.util.UUID;
 public class UploadServiceImpl implements UploadService {
     @Autowired
     private VideoMapper videoMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * @description: 上传视频
@@ -48,6 +52,25 @@ public class UploadServiceImpl implements UploadService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+
+    @Override
+    public boolean uploadAvatar(MultipartFile file, String username) {
+        if (file.isEmpty()) {
+            return false;
+        }
+        String fileName = file.getOriginalFilename();
+        String filePath = "D://upload/avatar/";
+        File dest = new File(filePath + fileName);
+        try {
+            userMapper.updateAvatarUrlByUsername(username, filePath + fileName);
+            file.transferTo(dest);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 }

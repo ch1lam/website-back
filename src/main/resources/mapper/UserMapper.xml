@@ -13,9 +13,11 @@
         <result column="college_name" jdbcType="VARCHAR" property="collegeName"/>
         <result column="school_num" jdbcType="VARCHAR" property="schoolNum"/>
         <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="avatar_url" jdbcType="VARCHAR" property="avatarUrl"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, role, phone_num, real_name, id_card, college_name, school_num,gender
+        id, username, password, role, phone_num, real_name, id_card, college_name,
+        school_num,gender,avatar_url
     </sql>
 
 
@@ -56,7 +58,13 @@
                id_card,
                college_name,
                school_num,
-               gender
+               gender,
+               avatar_url
+        from user
+        where username = #{username,jdbcType=VARCHAR}
+    </select>
+    <select id="getAvatarUrl" resultType="java.lang.String">
+        select avatar_url
         from user
         where username = #{username,jdbcType=VARCHAR}
     </select>
@@ -72,12 +80,12 @@
     <insert id="insert" parameterType="cn.chilam.websiteback.pojo.User">
         insert into user (id, username, password,
                           role, phone_num, real_name,
-                          id_card, college_name, school_num)
+                          id_card, college_name, school_num, avatar_url)
         values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
                 #{role,jdbcType=VARCHAR}, #{phoneNum,jdbcType=VARCHAR},
                 #{realName,jdbcType=VARCHAR},
                 #{idCard,jdbcType=VARCHAR}, #{collegeName,jdbcType=VARCHAR},
-                #{schoolNum,jdbcType=VARCHAR})
+                #{schoolNum,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="cn.chilam.websiteback.pojo.User">
         insert into user
@@ -109,6 +117,12 @@
             <if test="schoolNum != null">
                 school_num,
             </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="avatarUrl != null">
+                avater_url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -137,6 +151,12 @@
             </if>
             <if test="schoolNum != null">
                 #{schoolNum,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=INTEGER},
+            </if>
+            <if test="avatarUrl != null">
+                #{avatarUrl,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -185,5 +205,16 @@
             college_name = #{collegeName,jdbcType=VARCHAR},
             school_num   = #{schoolNum,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="updatePassword" parameterType="String">
+        update user
+        set password = #{password,jdbcType=VARCHAR}
+        where username = #{username,jdbcType=VARCHAR}
+    </update>
+    <update id="updateAvatarUrlByUsername" parameterType="String">
+        update user
+        set avatar_url=#{avatarUrl,jdbcType=VARCHAR}
+        where username = #{username,jdbcType=VARCHAR}
     </update>
 </mapper>

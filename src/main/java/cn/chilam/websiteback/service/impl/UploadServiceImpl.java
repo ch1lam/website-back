@@ -5,6 +5,7 @@ import cn.chilam.websiteback.mapper.VideoMapper;
 import cn.chilam.websiteback.pojo.Video;
 import cn.chilam.websiteback.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,6 +28,9 @@ public class UploadServiceImpl implements UploadService {
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${upload.file.location}")
+    private String address;
+
     /**
      * @description: 上传视频
      * @author: chilam
@@ -40,7 +44,7 @@ public class UploadServiceImpl implements UploadService {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String filePath = "D://Videos/Upload/";
+        String filePath = address+"/upload/video";
         File dest = new File(filePath + fileName);
         long fileSize = file.getSize();
         try {
@@ -61,7 +65,7 @@ public class UploadServiceImpl implements UploadService {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String filePath = "D://upload/avatar/";
+        String filePath = address+"/upload/avatar";
         File dest = new File(filePath + fileName);
         try {
             userMapper.updateAvatarUrlByUsername(username, filePath + fileName);

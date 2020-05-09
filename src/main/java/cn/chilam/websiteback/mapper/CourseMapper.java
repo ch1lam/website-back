@@ -20,4 +20,6 @@ public interface CourseMapper {
     int updateByPrimaryKey(Course record);
 
     List<Course> selectAllCourse();
+
+    String selectPosterUrlById(Integer id);
 }

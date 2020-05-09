@@ -15,4 +15,5 @@ public interface UserService {
     List<User> getAllUser();
     boolean updatePassword(String username,String password,String newPassword);
     String getAvatarUrl(String username);
+    int isExists(String username);
 }

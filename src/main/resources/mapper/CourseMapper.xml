@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.chilam.websiteback.mapper.CourseMapper">
     <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.Course">
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -9,7 +10,7 @@
         <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, user_id, teacher_name
+        id, name, user_id, teacher_name,picture_url
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -17,10 +18,16 @@
         from course
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectAllCourse" resultType="cn.chilam.websiteback.pojo.Course">
+    <select id="selectAllCourse" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from course
+    </select>
+    <select id="selectPosterUrlById" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        select picture_url
+        from course
+        where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
@@ -81,8 +88,8 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.chilam.websiteback.pojo.Course">
         update course
-        set name       = #{name,jdbcType=VARCHAR},
-            user_id    = #{userId,jdbcType=INTEGER},
+        set name         = #{name,jdbcType=VARCHAR},
+            user_id      = #{userId,jdbcType=INTEGER},
             teacher_name = #{teacherName,jdbcType=VARCHAR}
         where id = #{id,jdbcType=INTEGER}
     </update>

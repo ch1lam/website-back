@@ -65,6 +65,8 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         String token = httpServletRequest.getHeader("Token");
         JWTToken jwtToken = new JWTToken(token);
         // 提交给 realm 进行登入，如果错误他会跑出异常并被捕获
+
+
         getSubject(request, response).login(jwtToken);
         // 如果没有抛出异常则代表登入成功，返回true
         return true;

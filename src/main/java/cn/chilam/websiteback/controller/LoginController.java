@@ -47,7 +47,6 @@ public class LoginController {
     }
 
 
-    // TODO 未封装于service层
     @PostMapping("/login")
     public ResultMap login(@RequestParam("username") String username,
                            @RequestParam("password") String password) {

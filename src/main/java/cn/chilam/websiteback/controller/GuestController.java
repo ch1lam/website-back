@@ -2,9 +2,7 @@ package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
 import cn.chilam.websiteback.service.FileService;
-import cn.chilam.websiteback.service.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 

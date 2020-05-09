@@ -1,6 +1,7 @@
 package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
+import cn.chilam.websiteback.service.CourseService;
 import cn.chilam.websiteback.service.UploadService;
 import cn.chilam.websiteback.service.UserService;
 import org.apache.ibatis.annotations.Param;
@@ -13,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +34,9 @@ public class StudentController {
     @Autowired
     UploadService uploadService;
 
+    @Autowired
+    CourseService courseService;
+
 
     @RequestMapping(value = "/getMessage", method = RequestMethod.GET)
     @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
@@ -48,6 +51,16 @@ public class StudentController {
         Map<String, Object> data = new HashMap<>();
         data.put("userInfo", userService.getUserInfoByName(username));
         return ResultMap.ok().data(data);
+    }
+
+
+    @PostMapping("/getAllCourseInfo")
+    @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
+    public ResultMap getAllCourseInfo() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("CourseInfo", courseService.getAllCourseInfo());
+        return ResultMap.ok().data(data);
+
     }
 
     @PostMapping("/putPassword")
@@ -78,6 +91,18 @@ public class StudentController {
         inputStream.read(bytes, 0, inputStream.available());
         return bytes;
     }
+
+
+    @GetMapping(value = "/getPoster", produces = MediaType.IMAGE_JPEG_VALUE)
+    public byte[] getPoster(@RequestParam("id") Integer id) throws IOException {
+        String url = courseService.getPosterUrl(id);
+        File file = new File(url);
+        FileInputStream inputStream = new FileInputStream(file);
+        byte[] bytes = new byte[inputStream.available()];
+        inputStream.read(bytes, 0, inputStream.available());
+        return bytes;
+    }
+
 
     @PostMapping("/uploadAvatar")
     @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)

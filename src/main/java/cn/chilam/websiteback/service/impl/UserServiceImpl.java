@@ -46,4 +46,9 @@ public class UserServiceImpl implements UserService {
     public String getAvatarUrl(String username) {
         return userMapper.getAvatarUrl(username);
     }
+
+    @Override
+    public int isExists(String username) {
+        return userMapper.isExistsByUsername(username);
+    }
 }

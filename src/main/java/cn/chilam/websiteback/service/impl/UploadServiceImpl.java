@@ -1,9 +1,13 @@
 package cn.chilam.websiteback.service.impl;
 
+import cn.chilam.websiteback.mapper.CourseMapper;
 import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.mapper.VideoMapper;
 import cn.chilam.websiteback.pojo.Video;
 import cn.chilam.websiteback.service.UploadService;
+import cn.chilam.websiteback.util.FolderUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.UUID;
 
 /**
  * @program: website-back
@@ -22,11 +24,16 @@ import java.util.UUID;
  **/
 @Service
 public class UploadServiceImpl implements UploadService {
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private VideoMapper videoMapper;
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
     @Value("${upload.file.location}")
     private String address;
@@ -44,7 +51,7 @@ public class UploadServiceImpl implements UploadService {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String filePath = address+"/upload/video";
+        String filePath = address + "/upload/video";
         File dest = new File(filePath + fileName);
         long fileSize = file.getSize();
         try {
@@ -65,16 +72,52 @@ public class UploadServiceImpl implements UploadService {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String filePath = address+"/upload/avatar";
+        String filePath =
+                address + "/user/" + userMapper.selectByName(username).getId() + "_" + username +
+                        "/avatar/";
         File dest = new File(filePath + fileName);
         try {
+            // 创建文件夹
+            FolderUtil.createFolder(filePath);
             userMapper.updateAvatarUrlByUsername(username, filePath + fileName);
             file.transferTo(dest);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return false;
+    }
+
+
+    /**
+     * @description: 上传课程封面并更新封面url
+     * @author: chilam
+     * @param: file
+     * @param: courseId
+     * @return: boolean
+     * @date: 2020-05-2
+     */
+    @Override
+    public boolean uploadPoster(MultipartFile file, Integer courseId) {
+        if (file.isEmpty()) {
+            return false;
+        }
+        String courseName = courseMapper.selectByPrimaryKey(courseId).getName();
+
+        String fileName = file.getOriginalFilename();
+        String filePath = address + "/course/" + courseId + "_" + courseName + "/poster/";
+        try {
+            // 创建目录保存poster
+            FolderUtil.createFolder(filePath);
+            // 最终存放的路径
+            File dest = new File(filePath + fileName);
+            courseMapper.updatePictureUrlByIdAndUrl(courseId, filePath + fileName);
+            file.transferTo(dest);
+            return true;
+        } catch (IOException e) {
+            logger.error("错误异常" + e);
+            return false;
+        }
+
     }
 }

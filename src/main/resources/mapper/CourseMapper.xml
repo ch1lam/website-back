@@ -5,13 +5,36 @@
     <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.Course">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="first_class_id" jdbcType="INTEGER" property="firstClassId"/>
         <result column="teacher_name" jdbcType="VARCHAR" property="teacherName"/>
         <result column="picture_url" jdbcType="VARCHAR" property="pictureUrl"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, user_id, teacher_name,picture_url
+        id, name, first_class_id, teacher_name,picture_url
     </sql>
+    <update id="updatePictureUrlByIdAndUrl">
+        update course
+        set picture_url = #{pictureUrl,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.chilam.websiteback.pojo.Course">
+        update course
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="firstClassId != null">
+                first_class_id = #{firstClassId,jdbcType=INTEGER},
+            </if>
+            <if test="teacherName != null">
+                teacher_name = #{teacherName,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                picture_url = #{pictureUrl,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -29,68 +52,51 @@
         from course
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectLastId" resultType="java.lang.Integer">
+        select LAST_INSERT_ID();
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from course
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Course">
-        insert into course (id, name, user_id,
+        insert into course (id, name, first_class_id,
                             teacher_name)
-        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
+        values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{firstClassId,jdbcType=INTEGER},
                 #{teacherName,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="cn.chilam.websiteback.pojo.Course">
+    <insert id="insertSelective" parameterType="cn.chilam.websiteback.pojo.Course"
+            useGeneratedKeys="true"
+            keyProperty="id">
         insert into course
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
             <if test="name != null">
                 name,
             </if>
-            <if test="userId != null">
-                user_id,
+            <if test="firstClassId != null">
+                first_class_id,
             </if>
             <if test="teacherName != null">
                 teacher_name,
             </if>
+            <if test="pictureUrl != null">
+                picture_url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
             <if test="name != null">
                 #{name,jdbcType=VARCHAR},
             </if>
-            <if test="userId != null">
-                #{userId,jdbcType=INTEGER},
+            <if test="firstClassId != null">
+                #{firstClassId,jdbcType=INTEGER},
             </if>
-            <if test="teacherId != null">
+            <if test="teacherName != null">
                 #{teacherName,jdbcType=VARCHAR},
+            </if>
+            <if test="pictureUrl != null">
+                #{pictureUrl,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="cn.chilam.websiteback.pojo.Course">
-        update course
-        <set>
-            <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
-            </if>
-            <if test="userId != null">
-                user_id = #{userId,jdbcType=INTEGER},
-            </if>
-            <if test="teacherId != null">
-                teacher_name = #{teacherName,jdbcType=VARCHAR},
-            </if>
-        </set>
-        where id = #{id,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="cn.chilam.websiteback.pojo.Course">
-        update course
-        set name         = #{name,jdbcType=VARCHAR},
-            user_id      = #{userId,jdbcType=INTEGER},
-            teacher_name = #{teacherName,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
-    </update>
 </mapper>

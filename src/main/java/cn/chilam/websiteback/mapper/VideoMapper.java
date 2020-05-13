@@ -19,5 +19,6 @@ public interface VideoMapper {
 
     String getUrlByName(String name);
 
+    String selectUrlById(Integer id);
 
 }

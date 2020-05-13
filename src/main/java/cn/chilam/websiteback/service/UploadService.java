@@ -13,4 +13,9 @@ public interface UploadService {
 
     boolean uploadAvatar(MultipartFile file,String username);
 
+
+    boolean uploadPoster(MultipartFile file,Integer courseId);
+
+
+
 }

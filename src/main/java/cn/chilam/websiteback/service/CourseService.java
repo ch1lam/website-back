@@ -1,6 +1,7 @@
 package cn.chilam.websiteback.service;
 
-import cn.chilam.websiteback.mapper.CourseMapper;
+import cn.chilam.websiteback.common.entity.Node;
+import cn.chilam.websiteback.pojo.Chapter;
 import cn.chilam.websiteback.pojo.Course;
 
 import java.util.List;
@@ -16,5 +17,22 @@ public interface CourseService {
     List<Course> getAllCourseInfo();
 
     String getPosterUrl(Integer id);
+
+    Boolean postCourse(String courseName, String teacherName);
+
+    Boolean updateCourse(Integer id, String courseName, String teacherName);
+
+    Boolean updateChapter(Integer id, String name,Integer sequence);
+
+    int postChapter(Chapter chapter, Integer parentId);
+
+    List<Node> getAllChapterById(Integer id);
+
+
+
+    boolean deleteCourseById(Integer id);
+
+    boolean deleteChapter(Integer id);
+
 
 }

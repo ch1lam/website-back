@@ -6,10 +6,35 @@ public class Course implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer id;
     private String name;
-    private Integer userId;
+    private Integer firstClassId; // 课程第一个小节的id
     private String teacherName;
     private String pictureUrl;
 
+    public Course(Integer id, String name, Integer firstClassId, String teacherName,
+                  String pictureUrl) {
+        this.id = id;
+        this.name = name;
+        this.firstClassId = firstClassId;
+        this.teacherName = teacherName;
+        this.pictureUrl = pictureUrl;
+    }
+
+    public Course(String courseName, String teacherName) {
+        this.name = courseName;
+        this.teacherName = teacherName;
+    }
+
+    public Course(String name, Integer firstClassId, String teacherName) {
+        this.name = name;
+        this.firstClassId = firstClassId;
+        this.teacherName = teacherName;
+    }
+
+    public Course(Integer id, String name, String teacherName) {
+        this.id = id;
+        this.name = name;
+        this.teacherName = teacherName;
+    }
 
     public Integer getId() {
         return id;
@@ -27,12 +52,12 @@ public class Course implements Serializable {
         this.name = name == null ? null : name.trim();
     }
 
-    public Integer getUserId() {
-        return userId;
+    public Integer getfirstClassId() {
+        return firstClassId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    public void setfirstClassId(Integer firstClassId) {
+        this.firstClassId = firstClassId;
     }
 
     public String getTeacherName() {
@@ -43,54 +68,13 @@ public class Course implements Serializable {
         this.teacherName = teacherName;
     }
 
-    public String getPictureUrl() { return pictureUrl;}
-
-    public void setPictureUrl(String pictureUrl) { this.pictureUrl = pictureUrl; }
-
-    @Override
-    public boolean equals(Object that) {
-        if (this == that) {
-            return true;
-        }
-        if (that == null) {
-            return false;
-        }
-        if (getClass() != that.getClass()) {
-            return false;
-        }
-        Course other = (Course) that;
-        return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-                && (this.getName() == null ? other.getName() == null :
-                this.getName().equals(other.getName()))
-                && (this.getUserId() == null ? other.getUserId() == null :
-                this.getUserId().equals(other.getUserId()))
-                && (this.getTeacherName() == null ? other.getTeacherName() == null :
-                this.getTeacherName().equals(other.getTeacherName()));
+    public String getPictureUrl() {
+        return pictureUrl;
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
-        result = prime * result + ((getName() == null) ? 0 : getName().hashCode());
-        result = prime * result + ((getUserId() == null) ? 0 : getUserId().hashCode());
-        result = prime * result + ((getTeacherName() == null) ? 0 : getTeacherName().hashCode());
-        return result;
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", name=").append(name);
-        sb.append(", userId=").append(userId);
-        sb.append(", teacherId=").append(teacherName);
-        sb.append(", serialVersionUID=").append(serialVersionUID);
-        sb.append("]");
-        return sb.toString();
-    }
+
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public interface FileService {
     String getUrlByName(String fileName);
 
-    boolean uploadVideo(MultipartFile file);
+    boolean uploadVideo(MultipartFile file,Integer id);
     boolean uploadFile(MultipartFile file);
 
     void DownloadFile();

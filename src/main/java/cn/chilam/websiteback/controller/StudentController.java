@@ -1,5 +1,6 @@
 package cn.chilam.websiteback.controller;
 
+import cn.chilam.websiteback.common.entity.Node;
 import cn.chilam.websiteback.common.entity.ResultMap;
 import cn.chilam.websiteback.service.CourseService;
 import cn.chilam.websiteback.service.UploadService;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,5 +116,15 @@ public class StudentController {
             return ResultMap.error().message("上传失败");
         }
 
+    }
+
+
+    @PostMapping("/getAllChapter")
+    @RequiresRoles(value = {"student", "teacher", "admin"}, logical = Logical.OR)
+    public ResultMap getAllChapter(@RequestParam("id") Integer id) {
+        Map<String, Object> data = new HashMap<>();
+        List<Node> tmp = courseService.getAllChapterById(id);
+        data.put("chapters", tmp);
+        return ResultMap.ok().data(data);
     }
 }

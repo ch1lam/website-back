@@ -19,7 +19,7 @@ spring:
 upload:
   file:
     # 文件上传路径
-    location: D://upload
+    location: D://WebsiteResources
 server:
   # api端口
   port: 9999

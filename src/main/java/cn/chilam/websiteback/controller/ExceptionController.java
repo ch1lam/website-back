@@ -18,6 +18,6 @@ public class ExceptionController {
     // 捕捉CustomRealm抛出的异常
     @ExceptionHandler
     public void handleShiroException(Exception e) {
-        logger.warn("shiro捕获异常：" + e);
+        logger.warn("捕获异常：" + e);
     }
 }

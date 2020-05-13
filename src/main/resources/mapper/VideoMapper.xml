@@ -14,7 +14,8 @@
         id, name, url, role, size,upload_date
     </sql>
 
-    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Video">
+    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Video" useGeneratedKeys="true"
+            keyProperty="id">
         insert into video (name, url, size)
         values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
                 #{size,jdbcType=BIGINT})
@@ -30,6 +31,11 @@
         select url
         from video
         where name = #{name,jdbcType=VARCHAR}
+    </select>
+    <select id="selectUrlById" resultType="java.lang.String">
+        select url
+        from video
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
 

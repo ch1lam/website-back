@@ -15,11 +15,14 @@ public interface CourseMapper {
 
     Course selectByPrimaryKey(Integer id);
 
-    int updateByPrimaryKeySelective(Course record);
-
-    int updateByPrimaryKey(Course record);
-
     List<Course> selectAllCourse();
 
+    boolean updateByPrimaryKeySelective(Course record);
+
     String selectPosterUrlById(Integer id);
+
+    // 获取最后一个自增id，可用于高并发
+    int selectLastId();
+
+    int updatePictureUrlByIdAndUrl(Integer id,String pictureUrl);
 }

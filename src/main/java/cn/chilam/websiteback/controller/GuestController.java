@@ -1,7 +1,9 @@
 package cn.chilam.websiteback.controller;
 
 import cn.chilam.websiteback.common.entity.ResultMap;
+import cn.chilam.websiteback.mapper.VideoMapper;
 import cn.chilam.websiteback.service.FileService;
+import cn.chilam.websiteback.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,40 +25,42 @@ import java.nio.charset.StandardCharsets;
 public class GuestController {
 
 
-
     @Autowired
     FileService fileService;
+    @Autowired
+    VideoService videoService;
 
     // 播放视频
     @GetMapping("/video")
     public void videoStream(HttpServletRequest request,
-                            HttpServletResponse response) throws IOException {
+                            HttpServletResponse response,
+                            @RequestParam("id") Integer id) throws IOException {
         // 清空缓存
         response.reset();
         // 获取响应的输出流
         OutputStream outputStream = response.getOutputStream();
 //        File file = new File("D:/Videos/Captures/WW3.mp4");
-        File file = new File("D:/Videos/rrys/西部世界第3季/西部世界.Westworld.S03E05.中英字幕.HDTVrip.720P-人人影视" +
-                ".mp4");
+        File file = new File(videoService.getUrlById(id));
+//        File file = new File("D://Videos/Captures/WW3.mp4");
         if (file.exists()) {
-            //创建随机读取文件对象
+            // 创建随机读取文件对象
             RandomAccessFile targetFile = new RandomAccessFile(file, "r");
             long fileLength = targetFile.length();
-            //获取从那个字节开始读取文件
+            // 获取从那个字节开始读取文件
             String rangeString = request.getHeader("Range");
             if (rangeString != null) {
                 long range = Long.parseLong(rangeString.substring(rangeString.indexOf("=") + 1,
                         rangeString.indexOf("-")));
                 // 设置内容类型
                 response.setContentType("video/mp4");
-                //设置此次相应返回的数据长度
+                // 设置此次相应返回的数据长度
                 response.setHeader("Content-Length", String.valueOf(fileLength - range));
-                //设置此次相应返回的数据范围
+                // 设置此次相应返回的数据范围
                 response.setHeader("Content-Range", "bytes " + range + "-" + (fileLength - 1) +
                         "/" + fileLength);
-                //返回码需要为206，而不是200
+                // 返回码需要为 206，而不是 200
                 response.setStatus(HttpServletResponse.SC_PARTIAL_CONTENT);
-                //设定文件读取开始位置（以字节为单位）
+                // 设定文件读取开始位置（以字节为单位）
                 targetFile.seek(range);
             }
             byte[] cache = new byte[1024 * 300];
@@ -73,20 +77,7 @@ public class GuestController {
         outputStream.flush();
         outputStream.close();
     }
-
-
-    // 上传视频
-    @PostMapping("/uploadVideo")
-    public ResultMap uploadVideo(@RequestParam("file") MultipartFile file) {
-        if (fileService.uploadVideo(file)) {
-            return ResultMap.ok().message("上传成功");
-        } else {
-            return ResultMap.error().message("上传失败");
-        }
-    }
     
-
-
     // 下载文件
     @GetMapping("/download/{fileName}")
     public void downloadWithFileName(@PathVariable("fileName") String fileName,

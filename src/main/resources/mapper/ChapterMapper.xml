@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chilam.websiteback.mapper.ChapterMapper">
+    <resultMap id="selectAllDescendantByIdResultMap" type="cn.chilam.websiteback.pojo.Chapter">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="chapter_name" jdbcType="VARCHAR" property="chapterName"/>
+        <result column="sequence" jdbcType="INTEGER" property="sequence"/>
+        <result column="video_id" jdbcType="INTEGER" property="videoId"/>
+    </resultMap>
+    <resultMap id="BaseResultMap" type="cn.chilam.websiteback.pojo.Chapter">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="chapter_name" jdbcType="VARCHAR" property="chapterName"/>
+        <result column="video_id" jdbcType="INTEGER" property="videoId"/>
+        <result column="sequence" jdbcType="INTEGER" property="sequence"/>
+    </resultMap>
+
+
+    <insert id="insert" parameterType="cn.chilam.websiteback.pojo.Chapter" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into chapter(chapter_name, parent_id, sequence)
+        values (#{chapterName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER},
+                #{sequence,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertPath">
+        INSERT INTO chapter_closure(ancestor, descendant, distance) (SELECT ancestor,
+                                                                            #{id,jdbcType=INTEGER},
+                                                                            distance + 1
+                                                                     FROM chapter_closure
+                                                                     WHERE descendant = #{parent,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertNode">
+        INSERT INTO chapter_closure(ancestor, descendant, distance)
+        VALUES (#{id,jdbcType=INTEGER}, #{id,jdbcType=INTEGER}, 0)
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.chilam.websiteback.pojo.Chapter">
+        update chapter
+        <set>
+            <if test="chapterName != null">
+                chapter_name = #{chapterName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="videoId != null">
+                video_id = #{videoId,jdbcType=INTEGER},
+            </if>
+            <if test="sequence != null">
+                sequence = #{sequence,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteById">
+        delete
+        from chapter
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deletePath">
+        DELETE
+        FROM chapter_closure
+        WHERE descendant = #{id,jdbcType=INTEGER}
+    </delete>
+    <select id="selectCountByLayer" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM chapter_closure
+        WHERE ancestor = 0
+          AND distance = #{distance,jdbcType=INTEGER}
+    </select>
+    <select id="selectDescendant" resultType="cn.chilam.websiteback.pojo.Chapter">
+        SELECT B.*
+        FROM chapter_closure AS A
+                 JOIN chapter AS B ON A.descendant = B.id
+        WHERE ancestor = #{id,jdbcType=INTEGER}
+          AND distance > 0
+    </select>
+    <select id="selectSubLayer" resultType="cn.chilam.websiteback.pojo.Chapter">
+        SELECT B.*
+        FROM chapter_closure AS A
+                 JOIN chapter AS B ON A.descendant = B.id
+        WHERE A.ancestor = #{ancestor,jdbcType=INTEGER}
+          AND A.distance = #{n,jdbcType=INTEGER}
+    </select>
+    <select id="isExistsById" resultType="java.lang.Boolean">
+        select EXISTS(
+                       select * from chapter where id = #{id,jdbcType=INTEGER}
+                   )
+    </select>
+    <select id="selectMaxDistanceById" resultType="java.lang.Integer">
+        select MAX(distance)
+        from chapter_closure
+        where ancestor = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAllDescendantById" resultMap="selectAllDescendantByIdResultMap">
+        SELECT chapter.id,
+               chapter.chapter_name,
+               chapter.sequence,
+               chapter.video_id
+        FROM chapter
+                 JOIN chapter_closure
+                      ON (
+                          chapter.id = chapter_closure.descendant
+                          )
+        WHERE chapter_closure.ancestor = #{id,jdbcType=INTEGER}
+        ORDER BY chapter_closure.distance, chapter.sequence
+    </select>
+    <select id="selectNextDescendantById"
+            resultType="cn.chilam.websiteback.pojo.ChapterClosure">
+        SELECT t1.descendant,
+               t1.ancestor
+        FROM chapter_closure AS t1
+                 JOIN (SELECT chapter.id,
+                              chapter.chapter_name,
+                              chapter.sequence
+                       FROM chapter
+                                JOIN chapter_closure
+                                     ON (
+                                         chapter.id = chapter_closure.descendant
+                                         )
+                       WHERE chapter_closure.ancestor = #{id,jdbcType=INTEGER}
+                       ORDER BY chapter_closure.distance, chapter.sequence) AS t2
+                      ON t1.descendant = t2.id
+        WHERE t1.distance = 1
+          AND t1.ancestor = #{id,jdbcType=INTEGER}
+        ORDER BY t1.ancestor, t2.sequence
+    </select>
+    <select id="selectDescendantId" resultType="cn.chilam.websiteback.pojo.ChapterClosure">
+        SELECT descendant
+        FROM chapter_closure
+        WHERE ancestor = #{id}
+          AND distance > 0
+    </select>
+    <select id="selectRootPathById" parameterType="java.lang.Integer"
+            resultType="cn.chilam.websiteback.pojo.ChapterClosure">
+        SELECT ancestor
+        FROM chapter_closure
+        WHERE descendant = #{id,jdbcType=INTEGER}
+        ORDER BY distance DESC
+    </select>
+    <select id="selectById" resultMap="BaseResultMap">
+        select id, chapter_name, parent_id, video_id, sequence
+        from chapter
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+
+</mapper>

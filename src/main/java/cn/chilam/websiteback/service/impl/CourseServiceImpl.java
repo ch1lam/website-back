@@ -218,10 +218,18 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
-    @Transactional
     @Override
     public boolean deleteChapter(Integer id) {
         try {
+            // 生成目录url
+            StringBuilder url = new StringBuilder(address + "/course/");
+            for (ChapterClosure chap : chapterMapper.selectRootPathById(id)) {
+                Chapter tmp = chapterMapper.selectById(chap.getAncestor());
+                url.append(tmp.getSequence()).append("_").append(tmp.getChapterName()).append("/");
+            }
+            logger.info("删除章节："+url);
+            // 删除文件夹及其内容
+            FolderUtil.deleteFolder(url.toString());
             // 删除当前章节节点
             SQLUtil.checkEffective(chapterMapper.deleteById(id));
             // 删除当前章节为终点的路径
@@ -231,19 +239,11 @@ public class CourseServiceImpl implements CourseService {
                 SQLUtil.checkEffective(chapterMapper.deleteById(des.getDescendant()));
                 chapterMapper.deletePath(des.getDescendant());
             }
-
-            // 生成目录url
-            StringBuilder url = new StringBuilder(address + "/course/");
-            for (ChapterClosure chap : chapterMapper.selectRootPathById(id)) {
-                Chapter tmp = chapterMapper.selectById(chap.getAncestor());
-                url.append(tmp.getSequence()).append("_").append(tmp.getChapterName()).append("/");
-            }
-            // 删除文件夹及其内容
-            FolderUtil.deleteFolder(url.toString());
             return true;
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
             return false;
         }
+
     }
 }

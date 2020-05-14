@@ -24,7 +24,11 @@ public class FolderUtil {
     // 删除目录及其内容
     public static void deleteFolder(String url) {
         File directory = new File(url);
-        FileUtils.deleteQuietly(directory);
+        // 如果文件存在，则删除
+        if (directory.exists()) {
+            FileUtils.deleteQuietly(directory);
+        }
+
     }
 
 }

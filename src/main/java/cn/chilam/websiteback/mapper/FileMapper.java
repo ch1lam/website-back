@@ -16,11 +16,12 @@ public interface FileMapper {
     void insert(File record);
 
     File getFileInfoByName(String name);
+    File getFileInfoById(Integer id);
 
     List<File> getAllFileInfo();
 
     String getUrlByName(String name);
 
-    String deleteByName(String name);
+    String deleteById(Integer id);
 
 }

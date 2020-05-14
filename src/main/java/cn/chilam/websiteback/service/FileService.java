@@ -12,17 +12,18 @@ import java.util.List;
  * @create: 2020-03-20
  **/
 public interface FileService {
-    String getUrlByName(String fileName);
 
-    boolean uploadVideo(MultipartFile file,Integer id);
-    boolean uploadFile(MultipartFile file);
+    boolean uploadVideo(MultipartFile file, Integer id);
+
+    boolean uploadFile(MultipartFile file, Integer id);
 
     void DownloadFile();
 
     List<File> searchAllFile();
 
-    void deleteFile(String name);
+    void deleteFile(Integer id);
 
-    void playVideo();
+    File getFileInfo(Integer id);
+
 
 }

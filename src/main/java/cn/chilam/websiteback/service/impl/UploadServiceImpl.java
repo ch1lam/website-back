@@ -66,6 +66,36 @@ public class UploadServiceImpl implements UploadService {
         return false;
     }
 
+    /**
+     * @description: 上传文件
+     * @author: chilam
+     * @param: file
+     * @return: 上传是否成功
+     * @date: 2020-04-10
+     */
+    @Override
+    public boolean uploadFile(MultipartFile file) {
+        if (file.isEmpty()) {
+            return false;
+        }
+        String fileName = file.getOriginalFilename();
+        String filePath = address + "/upload/video";
+        File dest = new File(filePath + fileName);
+        long fileSize = file.getSize();
+        try {
+            Video video = new Video(fileName,
+                    filePath + fileName, fileSize);
+            videoMapper.insert(video);
+            file.transferTo(dest);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+
     @Override
     public boolean uploadAvatar(MultipartFile file, String username) {
         if (file.isEmpty()) {

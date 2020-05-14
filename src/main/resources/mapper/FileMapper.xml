@@ -8,21 +8,23 @@
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="size" jdbcType="BIGINT" property="size"/>
         <result column="upload_date" jdbcType="TIMESTAMP" property="date"/>
+        <result column="chapter_id" jdbcType="INTEGER" property="chapterId"/>
+
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, url, role, size,upload_date
+        id, name, url, size, size,upload_date,chapterId
     </sql>
 
     <insert id="insert" parameterType="cn.chilam.websiteback.pojo.File">
-        insert into file (name, url, size)
+        insert into file (name, url, size, chapter_id)
         values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
-                #{size,jdbcType=BIGINT})
+                #{size,jdbcType=BIGINT}, #{chapterId,jdbcType=INTEGER})
     </insert>
 
-    <delete id="deleteByName" parameterType="java.lang.String">
+    <delete id="deleteById" parameterType="java.lang.Integer">
         delete
         from file
-        where name = #{name,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
     </delete>
 
     <select id="getFileInfoByName" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -42,6 +44,12 @@
         select
         <include refid="Base_Column_List"/>
         from file
+    </select>
+    <select id="getFileInfoById" parameterType="java.lang.Integer"
+            resultType="cn.chilam.websiteback.pojo.File">
+        select
+        <include refid="Base_Column_List"/>
+        from file where id=#{id,jdbcType=VARCHAR}
     </select>
 
 

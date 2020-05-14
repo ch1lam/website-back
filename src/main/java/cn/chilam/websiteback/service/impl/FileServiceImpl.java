@@ -37,10 +37,6 @@ public class FileServiceImpl implements FileService {
     @Value("${upload.file.location}")
     private String address;
 
-    @Override
-    public String getUrlByName(String name) {
-        return videoMapper.getUrlByName(name);
-    }
 
     /**
      * @description: 上传文件
@@ -55,11 +51,7 @@ public class FileServiceImpl implements FileService {
         if (file.isEmpty()) {
             return false;
         }
-
-
         String fileName = file.getOriginalFilename();
-
-
         // 生成目录url
         StringBuilder url = new StringBuilder(address + "/course/");
 
@@ -68,11 +60,11 @@ public class FileServiceImpl implements FileService {
             url.append(tmp.getSequence()).append("_").append(tmp.getChapterName()).append("/");
         }
         String filePath = url.toString() + fileName;
-        java.io.File dest = new java.io.File(filePath + fileName);
+        java.io.File dest = new java.io.File(filePath);
         long fileSize = file.getSize();
         try {
             Video video = new Video(fileName,
-                    filePath + fileName, fileSize);
+                    filePath, fileSize);
             videoMapper.insert(video);
             // 取刚才插入的视频id
             int VideoId = video.getId();
@@ -91,18 +83,26 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean uploadFile(MultipartFile file) {
+    public boolean uploadFile(MultipartFile file, Integer id) {
         if (file.isEmpty()) {
             return false;
         }
         String fileName = file.getOriginalFilename();
-        String filePath = address + "/File/";
-        java.io.File dest = new java.io.File(filePath + fileName);
+        // 生成目录url
+        StringBuilder url = new StringBuilder(address + "/course/");
+
+        for (ChapterClosure chap : chapterMapper.selectRootPathById(id)) {
+            Chapter tmp = chapterMapper.selectById(chap.getAncestor());
+            url.append(tmp.getSequence()).append("_").append(tmp.getChapterName()).append("/");
+        }
+        String filePath = url.toString() + fileName;
+        java.io.File dest = new java.io.File(filePath);
         long fileSize = file.getSize();
         try {
-            File newFile = new File(fileName,
-                    filePath + fileName, fileSize);
+            File newFile = new File(fileName, filePath, fileSize, id);
             fileMapper.insert(newFile);
+
+            // 存文件
             file.transferTo(dest);
             return true;
         } catch (IOException e) {
@@ -122,14 +122,14 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(String name) {
-        fileMapper.deleteByName(name);
+    public void deleteFile(Integer id) {
+        fileMapper.deleteById(id);
     }
-
 
     @Override
-    public void playVideo() {
-
-
+    public File getFileInfo(Integer id) {
+        return fileMapper.getFileInfoById(id);
     }
+
+
 }

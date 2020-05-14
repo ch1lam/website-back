@@ -65,8 +65,6 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
         String token = httpServletRequest.getHeader("Token");
         JWTToken jwtToken = new JWTToken(token);
         // 提交给 realm 进行登入，如果错误他会跑出异常并被捕获
-
-
         getSubject(request, response).login(jwtToken);
         // 如果没有抛出异常则代表登入成功，返回true
         return true;
@@ -76,7 +74,7 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     private void responseError(ServletResponse response, String message) {
         try {
             HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-            // 设置编码，费则中文字符在重定向时会变为空字符串
+            // 设置编码，否则中文字符在重定向时会变为空字符串
             message = URLEncoder.encode(message, "UTF-8");
             httpServletResponse.sendRedirect("/unauthorized" + message);
         } catch (IOException e) {

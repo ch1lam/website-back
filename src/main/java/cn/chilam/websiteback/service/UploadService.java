@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 public interface UploadService {
     boolean uploadVideo(MultipartFile file);
+    boolean uploadFile(MultipartFile file);
 
     boolean uploadAvatar(MultipartFile file,String username);
 

@@ -79,11 +79,14 @@ public class GuestController {
     }
     
     // 下载文件
-    @GetMapping("/download/{fileName}")
-    public void downloadWithFileName(@PathVariable("fileName") String fileName,
+    @GetMapping("/download/{fileId}")
+    public void downloadWithFileName(@PathVariable("fileId") Integer id,
                                      HttpServletResponse response) {
-        File file = new File(fileService.getUrlByName(fileName));
-        response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+
+
+        File file = new File(fileService.getFileInfo(id).getUrl());
+        response.setHeader("Content-Disposition",
+                "attachment;filename=" + fileService.getFileInfo(id).getName());
         byte[] buff = new byte[1024];
         BufferedInputStream bis = null;
         OutputStream os = null;

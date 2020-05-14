@@ -119,21 +119,39 @@ public class TeacherController {
         }
     }
 
-    // 删除一个章节（根章节）
+    // 删除一个章节
     @PostMapping("deleteChapter")
     @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
     public ResultMap deleteChapter(@RequestParam("id") Integer id) {
+        if (id == null) {
+            return ResultMap.error().message("没有选择章节");
+        }
         if (courseService.deleteChapter(id)) {
             return ResultMap.ok();
         } else {
             return ResultMap.error();
         }
     }
+
     // 上传视频
     @PostMapping("/uploadVideo")
     @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
-    public ResultMap uploadVideo(@RequestParam("file") MultipartFile file,Integer id) {
-        if (fileService.uploadVideo(file,id)) {
+    public ResultMap uploadVideo(@RequestParam("file") MultipartFile file, Integer id) {
+        if (id == null) {
+            return ResultMap.error().message("没有选择章节");
+        }
+        if (fileService.uploadVideo(file, id)) {
+            return ResultMap.ok().message("上传成功");
+        } else {
+            return ResultMap.error().message("上传失败");
+        }
+    }
+
+    // 上传文件
+    @PostMapping("/uploadFile")
+    @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
+    public ResultMap uploadFile(@RequestParam("file") MultipartFile file, Integer id) {
+        if (fileService.uploadFile(file, id)) {
             return ResultMap.ok().message("上传成功");
         } else {
             return ResultMap.error().message("上传失败");

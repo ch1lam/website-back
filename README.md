@@ -1,13 +1,17 @@
 # 《毛概》课程网站
 ## 技术架构
-JDK v1.8
-springboot v2.2.4
-mybatis v1.2.13
-shiro v1.4.0
-auth0.jwt v3.3.0
-commons-fileupload v1.3.3
-mysql v5.7.29
-mysql-connector-java v5.1.48
+| 框架                 | 版本    |
+| -------------------- | ------- |
+| JDK                  | v1.8    |
+| springboot           | v2.2.4  |
+| mybatis              | v1.2.13 |
+| shiro                | v1.4.0  |
+| auth0.jwt            | v3.3.0  |
+| commons-fileupload   | v1.3.3  |
+| mysql                | v5.7.29 |
+| mysql-connector-java | v5.1.48 |
+
+
 ## 主要功能
 1. 用户管理
 2. 课程管理

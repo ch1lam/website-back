@@ -12,7 +12,7 @@
 
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, url, size, size,upload_date,chapterId
+        id, name, url, size, size,upload_date,chapter_id
     </sql>
 
     <insert id="insert" parameterType="cn.chilam.websiteback.pojo.File">

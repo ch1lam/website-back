@@ -78,40 +78,6 @@ public class GuestController {
         outputStream.close();
     }
     
-    // 下载文件
-    @GetMapping("/download/{fileId}")
-    public void downloadWithFileName(@PathVariable("fileId") Integer id,
-                                     HttpServletResponse response) {
 
-
-        File file = new File(fileService.getFileInfo(id).getUrl());
-        response.setHeader("Content-Disposition",
-                "attachment;filename=" + fileService.getFileInfo(id).getName());
-        byte[] buff = new byte[1024];
-        BufferedInputStream bis = null;
-        OutputStream os = null;
-        try {
-            os = response.getOutputStream();
-            bis = new BufferedInputStream(new FileInputStream(file));
-            int i = bis.read(buff);
-            while (i != -1) {
-                os.write(buff, 0, buff.length);
-                os.flush();
-                i = bis.read(buff);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-
-    }
 
 }

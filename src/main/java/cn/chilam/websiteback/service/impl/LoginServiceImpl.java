@@ -70,11 +70,12 @@ public class LoginServiceImpl implements LoginService {
      * @date: 2020-04-09
      */
     @Override
-    public int resign(String username, String password, String phoneNum) {
+    public int resign(String username, String password, String phoneNum,String realName,
+                      String idCard) {
         if (1 == userMapper.isExistsByUsername(username)) {
             return 2;
         }
-        User user = new User(username, password, "admin", phoneNum);
+        User user = new User(username, password, "student", phoneNum,realName,idCard);
         try {
             userMapper.insertSelective(user);
             return 1;

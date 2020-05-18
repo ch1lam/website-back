@@ -16,5 +16,7 @@ public interface LoginService {
 
     ResultMap refreshToken(String token);
 
-    int resign(String username,String password,String phoneNum);
+    int resign(String username,String password,String phoneNum,String realName,
+               String idCard);
+
 }

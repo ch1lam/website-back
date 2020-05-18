@@ -8,6 +8,7 @@ import cn.chilam.websiteback.pojo.ChapterClosure;
 import cn.chilam.websiteback.pojo.File;
 import cn.chilam.websiteback.pojo.Video;
 import cn.chilam.websiteback.service.FileService;
+import cn.chilam.websiteback.util.FolderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -122,13 +123,29 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteFile(Integer id) {
-        fileMapper.deleteById(id);
+    public boolean deleteFile(Integer id) {
+        try {
+            File file = fileMapper.getFileInfoById(id);
+            String filePath = file.getUrl();
+            FolderUtil.deleteFolder(filePath);
+            fileMapper.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
     }
 
     @Override
     public File getFileInfo(Integer id) {
         return fileMapper.getFileInfoById(id);
+    }
+
+    @Override
+    public List<File> getAllFileInfo() {
+        return fileMapper.getAllFileInfo();
     }
 
 

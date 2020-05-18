@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -124,25 +125,26 @@ public class UploadServiceImpl implements UploadService {
      * @author: chilam
      * @param: file
      * @param: courseId
+     * @param: sequence
      * @return: boolean
      * @date: 2020-05-2
      */
     @Override
-    public boolean uploadPoster(MultipartFile file, Integer courseId) {
+    public boolean uploadPoster(MultipartFile file,Integer courseId,Integer sequence) {
         if (file.isEmpty()) {
             return false;
         }
         String courseName = courseMapper.selectByPrimaryKey(courseId).getName();
 
         String fileName = file.getOriginalFilename();
-        String filePath = address + "/course/" + courseId + "_" + courseName + "/poster/";
+        String filePath = address + "/course/" + sequence + "_" + courseName + "/poster/";
         try {
             // 创建目录保存poster
             FolderUtil.createFolder(filePath);
             // 最终存放的路径
             File dest = new File(filePath + fileName);
-            courseMapper.updatePictureUrlByIdAndUrl(courseId, filePath + fileName);
             file.transferTo(dest);
+            courseMapper.updatePictureUrlByIdAndUrl(courseId, filePath + fileName);
             return true;
         } catch (IOException e) {
             logger.error("错误异常" + e);

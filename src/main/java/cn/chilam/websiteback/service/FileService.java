@@ -21,9 +21,11 @@ public interface FileService {
 
     List<File> searchAllFile();
 
-    void deleteFile(Integer id);
+    boolean deleteFile(Integer id);
 
     File getFileInfo(Integer id);
+
+    List<File> getAllFileInfo();
 
 
 }

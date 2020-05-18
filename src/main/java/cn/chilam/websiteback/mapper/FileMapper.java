@@ -22,6 +22,6 @@ public interface FileMapper {
 
     String getUrlByName(String name);
 
-    String deleteById(Integer id);
+    Boolean deleteById(Integer id);
 
 }

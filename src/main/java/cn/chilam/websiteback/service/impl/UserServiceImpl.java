@@ -3,8 +3,9 @@ package cn.chilam.websiteback.service.impl;
 import cn.chilam.websiteback.mapper.UserMapper;
 import cn.chilam.websiteback.pojo.User;
 import cn.chilam.websiteback.service.UserService;
-import com.github.pagehelper.PageHelper;
+import cn.chilam.websiteback.util.FolderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserMapper userMapper;
+    @Value("${upload.file.location}")
+    private String address;
 
     @Override
     public User getUserInfoByName(String username) {
@@ -51,4 +54,27 @@ public class UserServiceImpl implements UserService {
     public int isExists(String username) {
         return userMapper.isExistsByUsername(username);
     }
+
+    @Override
+    public boolean deleteUserById(Integer id) {
+        try{
+            String filePath =
+                    address + "/user/" + id + "_" + userMapper.selectByPrimaryKey(id).getUsername();
+            System.out.println(filePath);
+            FolderUtil.deleteFolder(filePath);
+            userMapper.deleteByPrimaryKey(id);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+
+    }
+
+    @Override
+    public boolean updateUserById(User user) {
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
+
 }

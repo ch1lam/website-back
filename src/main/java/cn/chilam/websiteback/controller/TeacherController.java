@@ -36,22 +36,14 @@ public class TeacherController {
     @Autowired
     FileService fileService;
 
-    // 获取所有用户信息
-    @PostMapping("/getAllUser")
-    @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
-    public ResultMap getAllUser() {
-        Map<String, Object> data = new HashMap<>();
-        data.put("userInfo", userService.getAllUser());
-        return ResultMap.ok().data(data);
-    }
-
 
     // 新增课程
     @PostMapping("/postCourse")
     @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
     public ResultMap postCourse(@RequestParam("courseName") String courseName,
-                                @RequestParam("teacherName") String teacherName) {
-        if (courseService.postCourse(courseName, teacherName)) {
+                                @RequestParam("teacherName") String teacherName,
+                                @RequestParam("sequence") Integer sequence) {
+        if (courseService.postCourse(courseName, teacherName, sequence)) {
             return ResultMap.ok();
         } else {
             return ResultMap.error();
@@ -74,8 +66,9 @@ public class TeacherController {
     // 上传课程封面
     @PostMapping("/postPoster")
     @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
-    public ResultMap postPoster(MultipartFile file, @RequestParam("courseId") Integer courseId) {
-        if (uploadService.uploadPoster(file, courseId)) {
+    public ResultMap postPoster(MultipartFile file, @RequestParam("courseId") Integer courseId ,
+                                @RequestParam("sequence") Integer sequence) {
+        if (uploadService.uploadPoster(file, courseId,sequence)) {
             return ResultMap.ok();
         } else {
             return ResultMap.error();
@@ -95,6 +88,16 @@ public class TeacherController {
         }
     }
 
+    // 获取course对应的chapterId
+    @PostMapping("getBigChapterId")
+    @RequiresRoles(value = {"teacher", "admin","student"}, logical = Logical.OR)
+    public ResultMap getBigChapterId(@RequestParam("courseId") Integer courseId) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("rootId", courseService.getChapterId(courseId));
+        return ResultMap.ok().data(data);
+
+    }
+
 
     // 新增一个章节
     @PostMapping("postChapter")
@@ -111,8 +114,9 @@ public class TeacherController {
     // 删除一个课程（根章节）
     @PostMapping("deleteCourse")
     @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
-    public ResultMap deleteCourse(@RequestParam("id") Integer id) {
-        if (courseService.deleteCourseById(id)) {
+    public ResultMap deleteCourse(@RequestParam("id") Integer id ,
+                                  @RequestParam("sequence") Integer sequence) {
+        if (courseService.deleteCourseById(id,sequence)) {
             return ResultMap.ok();
         } else {
             return ResultMap.error();
@@ -155,6 +159,17 @@ public class TeacherController {
             return ResultMap.ok().message("上传成功");
         } else {
             return ResultMap.error().message("上传失败");
+        }
+    }
+
+
+    @PostMapping("/deleteFile")
+    @RequiresRoles(value = {"teacher", "admin"}, logical = Logical.OR)
+    public ResultMap deleteFile(@RequestParam("id") Integer id) {
+        if (fileService.deleteFile(id)) {
+            return ResultMap.ok();
+        } else {
+            return ResultMap.error();
         }
     }
 

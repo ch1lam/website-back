@@ -38,7 +38,17 @@
         where username = #{username,jdbcType=VARCHAR}
     </select>
     <select id="getAllUser" resultMap="BaseResultMap">
-        select *
+        select id,
+               username,
+               '***' as password,
+               role,
+               phone_num,
+               real_name,
+               id_card,
+               college_name,
+               school_num,
+               gender,
+               avatar_url
         from user
     </select>
     <select id="isExistsByUsername" resultType="java.lang.Integer">
@@ -188,6 +198,9 @@
             </if>
             <if test="schoolNum != null">
                 school_num = #{schoolNum,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                gender = #{gender,jdbcType=INTEGER},
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}

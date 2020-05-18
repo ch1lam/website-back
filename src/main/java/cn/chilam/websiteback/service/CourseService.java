@@ -18,7 +18,7 @@ public interface CourseService {
 
     String getPosterUrl(Integer id);
 
-    Boolean postCourse(String courseName, String teacherName);
+    Boolean postCourse(String courseName, String teacherName , Integer sequence);
 
     Boolean updateCourse(Integer id, String courseName, String teacherName);
 
@@ -28,9 +28,9 @@ public interface CourseService {
 
     List<Node> getAllChapterById(Integer id);
 
+    int getChapterId(Integer id);
 
-
-    boolean deleteCourseById(Integer id);
+    boolean deleteCourseById(Integer id,Integer sequence);
 
     boolean deleteChapter(Integer id);
 

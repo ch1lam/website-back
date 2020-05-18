@@ -59,12 +59,12 @@ public class CourseServiceImpl implements CourseService {
      * @date: 2020-05-2
      */
     @Override
-    public Boolean postCourse(String courseName, String teacherName) {
+    public Boolean postCourse(String courseName, String teacherName,Integer sequence) {
 
         int id;
         try {
-            // 新建一个根章节，课程即根章节，parentId默认为0，sequence默认为1
-            Chapter chapter = new Chapter(courseName, 0, 1);
+            // 新建一个根章节，课程即根章节，parentId默认为0
+            Chapter chapter = new Chapter(courseName, 0, sequence);
             chapterMapper.insert(chapter);
             // chapter表中的id，准备插入course表中的first_class_id
             Integer chapterId = chapter.getId();
@@ -75,7 +75,7 @@ public class CourseServiceImpl implements CourseService {
 
             // 插入course表并获取id
             courseMapper.insertSelective(course);
-            String url = address + "/course/" + course.getId() + "_" + courseName;
+            String url = address + "/course/" + sequence.toString()+ "_" + courseName;
             // 创建文件夹
             FolderUtil.createFolder(url);
 
@@ -185,9 +185,14 @@ public class CourseServiceImpl implements CourseService {
         return new ArrayList<>(tmp.get(id).getChildren());
     }
 
+    @Override
+    public int getChapterId(Integer id) {
+        return courseMapper.selectByPrimaryKey(id).getfirstClassId();
+    }
+
     @Transactional
     @Override
-    public boolean deleteCourseById(Integer id) {
+    public boolean deleteCourseById(Integer id,Integer sequence) {
         try {
             // firstClassId是根据course.id得到的课程 在chapter表中对应的chapter.id
             int chapterId = courseMapper.selectByPrimaryKey(id).getfirstClassId();
@@ -206,7 +211,7 @@ public class CourseServiceImpl implements CourseService {
             // 要删除的course对象
             Course course = courseMapper.selectByPrimaryKey(id);
             // 课程文件夹
-            String url = address + "/course/" + course.getId() + "_" + course.getName();
+            String url = address + "/course/" + sequence + "_" + course.getName();
             // 删除课程文件夹及其内容
             FolderUtil.deleteFolder(url);
             // 在course表中删除课程

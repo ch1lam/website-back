@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface UserMapper {
-    int deleteByPrimaryKey(Integer id);
+    boolean deleteByPrimaryKey(Integer id);
 
     int insert(User record);
 
@@ -20,7 +20,7 @@ public interface UserMapper {
 
     List<User> getAllUser();
 
-    int updateByPrimaryKeySelective(User record);
+    boolean updateByPrimaryKeySelective(User record);
 
     int updateAvatarUrlByUsername(@Param("username") String username,
                                   @Param("avatarUrl") String avatarUrl);

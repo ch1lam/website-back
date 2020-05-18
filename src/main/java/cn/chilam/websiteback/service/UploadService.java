@@ -1,5 +1,6 @@
 package cn.chilam.websiteback.service;
 
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -15,7 +16,7 @@ public interface UploadService {
     boolean uploadAvatar(MultipartFile file,String username);
 
 
-    boolean uploadPoster(MultipartFile file,Integer courseId);
+    boolean uploadPoster(MultipartFile file,Integer courseId,Integer sequence);
 
 
 

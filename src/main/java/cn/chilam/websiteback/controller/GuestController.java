@@ -39,9 +39,7 @@ public class GuestController {
         response.reset();
         // 获取响应的输出流
         OutputStream outputStream = response.getOutputStream();
-//        File file = new File("D:/Videos/Captures/WW3.mp4");
         File file = new File(videoService.getUrlById(id));
-//        File file = new File("D://Videos/Captures/WW3.mp4");
         if (file.exists()) {
             // 创建随机读取文件对象
             RandomAccessFile targetFile = new RandomAccessFile(file, "r");
